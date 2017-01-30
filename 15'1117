@@ -1,0 +1,60 @@
+library("foreign")
+dd <- "Z:/daten/"
+#1
+x <- read.spss(paste0(dd, "Titanic_full.sav"), to.data.frame=T)
+#2
+#a
+tab <- table(x$Sex, x$Class)
+tab
+plot(tab)
+#b
+tab <- table(x$Survived, x$Sex, x$Class)
+tab
+plot(tab)
+#c
+par(mfrow=c(1,2))
+tab <- table(x$Sex, x$Class)
+plot(tab)
+tab <- table(x$Class, x$Sex)
+plot(tab)
+#3
+par(mfrow=c(1,1))
+b <- read.spss(paste0(dd, "BOSTONH.SAV"), to.data.frame=T)
+df <- data.frame(b$RM, b$LSTAT, b$MEDV)
+#4
+#a
+pairs(df, col = col)
+col <- ifelse(Boston$CHAS==1, "red", "black")
+#b 這一段有問題 java裝不起來
+Sys.setenv(JAVA_HOME="C:\\Program Files\\Java\\jre1.8.0_60") 
+if (!require("scagnostics")) install.packages("scagnostics")
+install.packages("rJava")
+library("rJava")
+library("scagnostics")
+scagnostics(df)
+#c
+library("MASS")
+parcoord(df)
+parcoord(df, col=col)
+#d
+if (!require("andrews")) install.packages("andrews")
+library("andrews")
+andrews(df, ymax=2)
+df$col <- as.factor(col)
+andrews(df, ymax=2, clr=4)
+#e
+pairs(b)
+s<-scagnostics(b)
+s["Monotonic", ]
+sort(s["Monotonic", ])
+plot(b$DIS, b$NOXSQ)
+bi<-sample(nrow(b), 50)
+andrews(b[bi,-9], clr=4, ymax=5.5)
+#
+bi<-sample(nrow(Boston), 50)
+parcoord(Boston)
+parcoord(Boston, col=col)
+parcoord(Boston[bi,], col=col[bi])
+#
+
+andrews(b[bi,-9], clr=4, ymax=5.5)
