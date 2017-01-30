@@ -1,0 +1,35 @@
+#16'0119 DatenII
+#1
+library(foreign)
+x<-read.spss('D:\\HU_Stat\\Datenanalyse II\\Data\\GSS.SAV', to.data.frame=T)
+head(x)
+
+#2a
+lm<-lm(educ~speduc+paeduc+rincmdol+tvhours,data=x)
+summary(lm)
+#is residual normal?
+r<-residuals(lm)
+qqnorm(r)
+qqline(r)
+#test for normal
+shapiro.test(r)
+
+#2b
+plot(lm)
+
+rs <- rstudent(lm)
+yh <- predict(lm)
+plot(yh, rs)
+plot(lm)
+#可以單維看 發現都是有點類別項的x
+
+#2c
+car::leverage.plots(lm)
+hatvalues(lm)
+
+#2e cook's distance
+cooks.distance(lm)
+
+dfbetas(lm)
+
+
