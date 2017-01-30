@@ -1,0 +1,46 @@
+#1
+library("foreign")
+ab <- read.spss("z:/daten/ALLBUS2014.SAV", to.data.frame = T)
+
+#2
+#a
+incans <- is.na(ab$V417) & !is.na(ab$V419)
+table(incans)
+#b 
+table(is.na(ab$V417), is.na(ab$V418))
+
+df   <- data.frame(income=ab$V417, worktime=ab$V118)
+mobj <- mice(df, m=1)
+df1  <- complete(mobj, 1)
+sum(is.na(df1))
+#c
+plot(ab$V419[incans], df1$income[incans])
+
+#3
+x <- read.spss("z:/daten/credit.SAV", to.data.frame = T)
+table(x$Problems)
+
+#4a
+tab <- table(x$Problems, x$BankAccount)
+tab
+chisq.test(tab)
+chisq.test(x$Problems, x$BankAccount)
+#b
+chi2 <- chisq.test(tab)$statistic
+sqrt(chi2/(chi2+sum(tab)))
+#4a+b mit Sex
+tab <- table(x$Problems, x$Sex)
+tab
+chisq.test(tab)
+chisq.test(x$Problems, x$Sex)
+chi2 <- chisq.test(tab)$statistic
+sqrt(chi2/(chi2+sum(tab)))
+#c
+tab1 <- table(x$Problems, x$BankAccount)
+plot(tab1)
+tab2 <- table(x$Problems, x$Sex)
+plot(tab2)
+tab3 <- table(x$Sex, x$Problems)
+plot(tab3)
+tab4 <- table(x$BankAccount, x$Problems)
+plot(tab4)
