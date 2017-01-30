@@ -1,2 +1,2 @@
 # Datenanalyse-II
-course R note
+course R note on various statistical analysis method, including 
